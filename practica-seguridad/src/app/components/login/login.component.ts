@@ -11,7 +11,8 @@ export class LoginComponent implements OnInit {
 
   email =''; 
   password='';
-  isLogged: boolean = true;  
+  isLogged: boolean = true;
+  attemps=0;  
   
   constructor(
     public authenticationService: AuthenticationService,
@@ -20,7 +21,8 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authenticationService.logout(); 
+    this.authenticationService.logout();
+    this.attemps = 5; 
   }
 
   async login(){
@@ -29,6 +31,9 @@ export class LoginComponent implements OnInit {
   
     if(this.isLogged){
       this.goToHome();
+    }
+    else if(this.isLogged == false){
+      this.attemps = this.attemps -1; 
     }
     
   }
