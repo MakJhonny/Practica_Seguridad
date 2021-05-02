@@ -10,7 +10,7 @@
             <label for="name">Contraseña</label>
             <input type="password" name="password" class="form-control" id="name_id"  [(ngModel)]="password">
             <div *ngIf="!isLogged" class="text-danger">Correo o contraseña incorrectos </div>
-            <div *ngIf="!isLogged" class="text-danger">Intentos restantes {{}} </div>
+            <div *ngIf="!isLogged" class="text-danger">Intentos restantes {{attemps}} </div>
           </div>
         <button  type="button" class="btn btn-primary" (click)="login()">Ingresar</button>
         <button type="button" class="btn btn-primary  mt-2" routerLink="create-account">Crear cuenta</button>
