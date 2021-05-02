@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import firebase from 'firebase/app';
 import "firebase/firestore";
+import { IpServiceService } from './services/ip-service.service';
 
 @Component({
   selector: 'app-root',
@@ -8,15 +9,25 @@ import "firebase/firestore";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'practica-seguridad';
+  title:string = 'practica-seguridad';
+  ipAddress:string='';
   
   constructor(
+    private ip:IpServiceService
 
   ){}
-
+ 
   async ngOnInit() {
     await this.initFirebase();
+    this.getIP(); 
   }
+
+  getIP()  
+  {  
+    this.ip.getIPAddress().subscribe((res:any)=>{  
+      this.ipAddress=res.ip;  
+    });  
+  }  
 
   async initFirebase() {
     const firebaseConfig = {
