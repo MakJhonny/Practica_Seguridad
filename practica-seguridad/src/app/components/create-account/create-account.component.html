@@ -1,0 +1,18 @@
+<div class="container">
+
+     <h1>Crear Cuenta</h1>
+      <form>
+        <div class="form-group">
+          <label for="name">Email</label>
+          <input type="text" name="email" class="form-control" id="name_id"  [(ngModel)]="email">
+        </div>
+        <div class="form-group">
+            <label for="name">Contraseña</label>
+            <input type="password" name="password" class="form-control" id="name_id"  [(ngModel)]="password">
+            <div *ngIf="!passwordLenght" class="text-danger">La contraseña debe tener por lo menos 8 caracteres, una mayúscula, una minúscula y un número</div>
+          </div>
+        <button  type="button" class="btn btn-primary mt-6" (click)="createAccount()">Crear Cuenta</button>
+        
+      </form>
+    </div>
+    
