@@ -5,6 +5,7 @@ import{IpServiceService} from '../../services/ip-service.service';
 import { HttpClient  } from '@angular/common/http'; 
 import * as moment from 'moment';
 import { timeStamp } from 'node:console';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 
@@ -22,12 +23,19 @@ export class LoginComponent implements OnInit {
   ipAddress:string=''; 
   country:string=''; 
   attempsExceded:boolean = false; 
+  coldown:any;
+  times:any
+  blockButtons:boolean = false;
+  
 
   user: any = {
    id: "",
    ip: "",
    date:"",
-   country:""
+   time:"",
+   country:"",
+   notShowing:false,
+   coldown:"",
   };
   
   constructor(
@@ -41,11 +49,18 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
       
     this.authenticationService.logout();
-    this.attemps = 3; 
+    this.attemps = 3;
+    console.log(this.blockButtons);
    
     this.user.ip = this.getIP();
-    this.user.date = new Date().toString(); 
+    this.times = new Date(); 
+    this.user.date = this.times.toString();
+    this.user.time = this.user.date.substr(15,16);
+
     this.getCountryName();
+
+    
+    // this.blockButtons = this.needToBlock(); 
    
   }
 
@@ -61,9 +76,15 @@ export class LoginComponent implements OnInit {
       this.attempsExceded = this.limitAttemps();
       if(this.attempsExceded){
         
+        this.coldown = new Date().toString().substr(15,16); // 2 mins coldown
+        this.user.coldown = this.coldown;
+        console.log("COLDWON: ", this.coldown);
+        this.user.notShowing = this.hasColdown();
         this.saveInfo(); 
+        this.needToBlock();
+
       
-        this.attemps = 3;
+        // this.attemps = 3;
       }
     }
     
@@ -107,6 +128,21 @@ export class LoginComponent implements OnInit {
 
   limitAttemps(){
     return this.attemps == 0; 
+  }
+  async needToBlock(){
+    let block:boolean= false;
+    const forbiddenUsers = await this.ip.getForbiddenUsers();
+    forbiddenUsers.forEach((user:any) => {
+      if((user.ip == this.ipAddress) && (user.coldown < this.user.time))
+      block = true; 
+      
+    }); 
+    this.blockButtons = block;
+    return block;
+  }
+
+  hasColdown(){
+    return this.coldown < this.user.time;
   }
   
 
