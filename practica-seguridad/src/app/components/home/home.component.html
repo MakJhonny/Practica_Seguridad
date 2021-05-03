@@ -1,1 +1,6 @@
-<p>Lista de Hosts que intentaron ingresar</p>
+<h1>Lista de Hosts que intentaron ingresar</h1>
+
+<li *ngFor="let users of forbiddenUsers;" class="list-group-item">
+    <h6><b>IP: </b>{{users.ip}}</h6>
+    <h6><b>Fecha y hora: </b>{{users.date}}</h6>
+    <h6><b>País: </b>{{users.country}}</h6>

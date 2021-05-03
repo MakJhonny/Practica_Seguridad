@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import{IpServiceService} from '../../services/ip-service.service';
 import { HttpClient  } from '@angular/common/http'; 
 import * as moment from 'moment';
+import { timeStamp } from 'node:console';
 
 
 
@@ -43,7 +44,7 @@ export class LoginComponent implements OnInit {
     this.attemps = 3; 
    
     this.user.ip = this.getIP();
-    this.user.date = new Date(); 
+    this.user.date = new Date().toString(); 
     this.getCountryName();
    
   }
@@ -107,6 +108,7 @@ export class LoginComponent implements OnInit {
   limitAttemps(){
     return this.attemps == 0; 
   }
+  
 
 
 
