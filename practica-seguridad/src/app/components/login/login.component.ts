@@ -3,6 +3,8 @@ import {AuthenticationService} from '../../services/authentication.service'
 import { Router, ActivatedRoute } from '@angular/router';
 import{IpServiceService} from '../../services/ip-service.service';
 import { HttpClient  } from '@angular/common/http'; 
+import * as moment from 'moment';
+
 
 
 @Component({
@@ -17,6 +19,7 @@ export class LoginComponent implements OnInit {
   isLogged: boolean = true;
   attemps=-1;
   ipAddress:string=''; 
+  country:string=''; 
   attempsExceded:boolean = false; 
 
   user: any = {
@@ -35,12 +38,13 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+      
     this.authenticationService.logout();
     this.attemps = 3; 
    
-    this.user.ip = this.getIP(); 
-    console.log(this.user.ip);
-    console.log(typeof(this.user.ip));
+    this.user.ip = this.getIP();
+    this.user.date = new Date(); 
+    this.getCountryName();
    
   }
 
@@ -65,7 +69,7 @@ export class LoginComponent implements OnInit {
   }
 
   goToHome(){
-    this.router.navigate(["/"]);   ///home
+    this.router.navigate(["/home"]);   ///home
   }
 
   public getIPAddress()  
@@ -73,6 +77,11 @@ export class LoginComponent implements OnInit {
     console.log(this.http.get("http://api.ipify.org/"));
     return this.http.get("http://api.ipify.org/");  
      
+  }
+  public getCountry(){
+    //return this.http.get("https://extreme-ip-lookup.com/json/")
+    console.log(this.user.country);
+    
   }  
   getIP()  
   {  
@@ -80,10 +89,17 @@ export class LoginComponent implements OnInit {
       this.ipAddress=res.ip;  
     });  
   } 
+  getCountryName(){
+    this.ip.getCountry().subscribe((res:any)=>{  
+      this.country=res.country; 
+  });
+  console.log(this.country);
+  }
 
   async saveInfo(){
   
-    this.user.ip = this.ipAddress; 
+    this.user.ip = this.ipAddress;
+    this.user.country = this.country; 
     console.log(this.ipAddress);
     await this.ip.saveInfo(this.user); // Guarda en DB a traves del servicio 
   }
