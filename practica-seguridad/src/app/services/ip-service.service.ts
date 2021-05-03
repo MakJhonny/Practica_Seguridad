@@ -17,6 +17,10 @@ export class IpServiceService {
   {  
     return this.http.get("http://api.ipify.org/?format=json");  
   }
+  public getCountry(){
+    return this.http.get("https://extreme-ip-lookup.com/json/")
+    
+  } 
   
   async saveInfo(user:any) {
     const db = firebase.firestore();
@@ -28,4 +32,15 @@ export class IpServiceService {
     await db.collection("failed_signin_attemps").doc(user.id).set(user);
     
   }
+  async getForbiddenUsers(){
+    const db = firebase.firestore(); 
+
+    return await db.collection("failed_signin_attemps").get().then(function(querySnapshot) {
+    const forbidenUsers:any = []; 
+    querySnapshot.forEach(function(doc) {
+      forbidenUsers.push(doc.data()); 
+    });
+    return forbidenUsers 
+});
+}
 }
