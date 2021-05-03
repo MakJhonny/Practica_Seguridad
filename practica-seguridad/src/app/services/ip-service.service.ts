@@ -20,11 +20,12 @@ export class IpServiceService {
   
   async saveInfo(user:any) {
     const db = firebase.firestore();
-    // if (isNew) {
+    if (true) {
       const id = await db.collection("failed_signin_attemps").doc().id;
       user.id = id;
-    // }
-    await db.collection("failed_signin_attemps").doc(user.id).set({...user});
+    }
+    console.log(user.id);
+    await db.collection("failed_signin_attemps").doc(user.id).set(user);
     
   }
 }

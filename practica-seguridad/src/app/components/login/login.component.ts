@@ -38,7 +38,9 @@ export class LoginComponent implements OnInit {
     this.authenticationService.logout();
     this.attemps = 3; 
    
-    console.log(this.ipAddress);
+    this.user.ip = this.getIP(); 
+    console.log(this.user.ip);
+    console.log(typeof(this.user.ip));
    
   }
 
@@ -81,7 +83,8 @@ export class LoginComponent implements OnInit {
 
   async saveInfo(){
   
-    this.user.ip = this.getIP(); 
+    this.user.ip = this.ipAddress; 
+    console.log(this.ipAddress);
     await this.ip.saveInfo(this.user); // Guarda en DB a traves del servicio 
   }
 
