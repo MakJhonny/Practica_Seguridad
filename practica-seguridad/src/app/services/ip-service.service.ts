@@ -17,10 +17,11 @@ export class IpServiceService {
   {  
     return this.http.get("http://api.ipify.org/?format=json");  
   }
-  public getCountry(){
+  public getInfo(){
     return this.http.get("https://extreme-ip-lookup.com/json/")
     
   } 
+
   
   async saveInfo(user:any) {
     const db = firebase.firestore();
