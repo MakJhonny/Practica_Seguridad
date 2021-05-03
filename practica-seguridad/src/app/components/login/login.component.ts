@@ -6,6 +6,7 @@ import { HttpClient  } from '@angular/common/http';
 import * as moment from 'moment';
 import { timeStamp } from 'node:console';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { ɵNullViewportScroller } from '@angular/common';
 
 
 
@@ -48,6 +49,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
       
+    this.needToBlock();
     this.authenticationService.logout();
     this.attemps = 3;
     console.log(this.blockButtons);
@@ -75,8 +77,10 @@ export class LoginComponent implements OnInit {
       this.attemps = this.attemps -1; 
       this.attempsExceded = this.limitAttemps();
       if(this.attempsExceded){
-        
-        this.coldown = new Date().toString().substr(15,16); // 2 mins coldown
+
+
+        let coldown2 = new Date();
+        this.coldown = new Date(coldown2.getTime()+60000).toString().substr(15,16); // 2 mins coldown
         this.user.coldown = this.coldown;
         console.log("COLDWON: ", this.coldown);
         this.user.notShowing = this.hasColdown();
@@ -131,9 +135,11 @@ export class LoginComponent implements OnInit {
   }
   async needToBlock(){
     let block:boolean= false;
+    let nowTime = new Date().toString().substr(15,16)
+    console.log("Actual", nowTime);
     const forbiddenUsers = await this.ip.getForbiddenUsers();
     forbiddenUsers.forEach((user:any) => {
-      if((user.ip == this.ipAddress) && (user.coldown < this.user.time))
+      if((user.ip == this.ipAddress) && (user.coldown > nowTime))
       block = true; 
       
     }); 
